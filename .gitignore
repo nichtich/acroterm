@@ -1,0 +1,26 @@
+# temporary backups
+*~
+*.backup
+
+# temporary (La)TeX files
+*.aux
+*.log
+*.bbl
+*.blg
+*.dvi
+*.ist
+*.glo
+*.gls
+*.glg
+*.toc
+*.out
+*.idx
+*.ilg
+*.ind
+
+# output files
+*.pdf
+*.tar.gz
+*.ins
+*.sty
+
