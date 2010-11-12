@@ -9,30 +9,29 @@ Synopsis
 
 Essentially, this package provides four new commands, to be used as:
 
-  \term{Potrzebie}
-
-  \acro{SNAFU}
-
-  \tacro{situation normal: all fucked up}{SNAFU}
-
-  \aterm{SNAFU}{situation normal: all fucked up}
+    \term{Potrzebie}
+    
+    \acro{SNAFU}
+    
+    \tacro{situation normal: all fucked up}{SNAFU}
+    
+    \aterm{SNAFU}{situation normal: all fucked up}
 
 Two of them support an optional parameter for indexing:
 
-  \term[Potrzebie System of Weights and Measures]{Potrzebie System}
-
-  \tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}
+    \term[Potrzebie System of Weights and Measures]{Potrzebie System}
+    
+    \tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}
 
 For each command there is a strong variant that starts with an uppercase:
 
-  \Term{Potrzebie}
-
-  \Acro{SNAFU}
-
-  \Tacro{situation normal: all fucked up}{SNAFU}
-
-  \Aterm{SNAFU}{situation normal: all fucked up}
- 
+    \Term{Potrzebie}
+    
+    \Acro{SNAFU}
+    
+    \Tacro{situation normal: all fucked up}{SNAFU}
+    
+    \Aterm{SNAFU}{situation normal: all fucked up}
 
 Changes
 -------
