@@ -10,7 +10,8 @@ $(PKG).ins: $(PKG).dtx
 	tex $<
 
 $(PKG).pdf: $(PKG).dtx
-	xelatex $<;
+	pdflatex $<;
+	pdflatex $<;
 
 $(PKG).sty: $(PKG).ins
 	tex $<
