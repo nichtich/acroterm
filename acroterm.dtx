@@ -50,6 +50,8 @@ This work consists of the file  acroterm.dtx
 \documentclass{ltxdoc}
 \usepackage{acroterm,hyperref}
 \newcommand*\pkg[1]{\texttt{#1}}
+\setlength\parindent{0pt}
+\setlength\parskip{4pt}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -75,56 +77,62 @@ This work consists of the file  acroterm.dtx
 % CTAN lists the \pkg{acronym} package and the \pkg{acromake}
 % package. Similar functionality is included in \pkg{glosstex}
 % and \pkg{glosstext}. These packages let you define acronyms
-% that can be expanded automatically in your document. However
-% I want to control where I use a term as acronym or as full 
-% term. The purpose of this package is only to control layout
-% of terms and acronyms, and to help you in creating an index.
-% Tracking the first ocurrence of a term\footnote{See for 
-% instance a quick solution at 
-% \url{http://blog.blubinc.net/2009/06/18/simple-latex-abbreviations/}}
-% is not the main goal of this package.
+% that can be expanded automatically in your document. The purpose
+% of this package is only to control layout of terms and acronyms,
+% and to help you in creating an index. You fully control where
+% a term is used in full form, and where it is used as acronym.
+% Tracking the first ocurrence of a term\footnote{See
+% \url{http://blog.blubinc.net/2009/06/18/simple-latex-abbreviations/}
+% for a quick solution} is not the goal of this package.
 %
 % \section{Technical details}
 %
 % The current version of this package is a buggy developer version.
 %
-% \section{Examples}
+% \section{Description}
 %
-% More to follow...
+% Essentially, this package provides four macros:
 %
-% \begin{quotation}
-%   \term{Potrzebie}
-%   \Term{Potrzebie}
-% \end{quotation}
+% \begin{tabular}{lcl}
+%   \verb|\term{Potrzebie}| & $\longrightarrow$ & \term{Potrzebie} \\
+%   \verb|\acro{SNAFU}|     & $\longrightarrow$ & \acro{SNAFU}  \\
+%   \verb|\tacro{Do it yourself}{DIY}| & $\longrightarrow$ & \tacro{Do it yourself}{DIY} \\
+%   \verb|\aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \aterm{DIY}{Do it yourself} \\
+% \end{tabular}
 %
-%   \term{Potrzebie}
-%   \Term{Potrzebie}
+% The \verb|\term| and \verb|\acro| macros simply set some text as term or
+% as acronym. \verb|\tacro| and \verb|\aterm| mark a term together with its
+% acronym or vice versa. In all cases, terms and acronyms are put into a 
+% special index that can be used later. Layout can be controlled globally.
 %
-% Essentially, this package provides four new commands, to be used as:
+% \verb|\term| and \verb|\tacro| support an optional parameter for indexing.
+% With
 %
-%    \term{Potrzebie}
+% ~~\verb|\term[Potrzebie System of Weights and Measures]{Potrzebie System}| \\
+% \hspace*{2em}~$\longrightarrow$
+% \term[Potrzebie System of Weights and Measures]{Potrzebie System}
 %    
-%    \acro{SNAFU}
-%    
-%    \tacro{situation normal: all fucked up}{SNAFU}
-%    
-%    \aterm{SNAFU}{situation normal: all fucked up}
+% the term `Potrzebie System of Weights and Measures' will included in the
+% index but `Potrzebie System' will be shown in the text. In the same way:
 %
-% Two of them support an optional parameter for indexing:
+% ~~\verb|\tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}| \\
+% \hspace*{2em}~$\longrightarrow$
+% \tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}
 %
-%    \term[Potrzebie System of Weights and Measures]{Potrzebie System}
-%    
-%    \tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}
+% For each command there is an emphasizing variant that starts with an 
+% uppercase letter:
 %
-% For each command there is a strong variant that starts with an uppercase:
+% \begin{tabular}{lcl}
+%   \verb|\Term{Potrzebie}| & $\longrightarrow$ & \Term{Potrzebie} \\
+%   \verb|\Acro{SNAFU}|     & $\longrightarrow$ & \Acro{SNAFU}  \\
+%   \verb|\Tacro{Do it yourself}{DIY}| & $\longrightarrow$ & \Tacro{Do it yourself}{DIY} \\
+%   \verb|\Aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \Aterm{DIY}{Do it yourself} \\
+% \end{tabular}
 %
-%    \Term{Potrzebie}
-%    
-%    \Acro{SNAFU}
-%    
-%    \Tacro{situation normal: all fucked up}{SNAFU}
-%    
-%    \Aterm{SNAFU}{situation normal: all fucked up}
+%%%    \Tacro{situation normal: all fucked up}{SNAFU}
+%%%    \Aterm{SNAFU}{situation normal: all fucked up}
+%%%    \tacro{situation normal: all fucked up}{SNAFU}
+%%%    \aterm{SNAFU}{situation normal: all fucked up}
 %
 % \newpage
 % \section{Implementation of \pkg{\jobname}}
@@ -139,7 +147,6 @@ This work consists of the file  acroterm.dtx
 \RequirePackage{xifthen}
 %    \end{macrocode}
 %
-% \noindent
 % The following commands are used to simply print acronyms and long terms. 
 % They do not index but only format the argument. You can redefine them 
 % to change layout of acronyms and terms. The uppercase variant is used 
@@ -176,7 +183,7 @@ This work consists of the file  acroterm.dtx
 % \begin{macro}{\provideacronym}
 % Here comes a buggy internal macro to be fixed.
 %    \begin{macrocode}
-\newcommand{\provideacronym}[2]{
+\newcommand{\provideacronym}[2]{%
   \expandafter\providecommand\expandafter{\csname acronymlong#2\endcsname}{#1}%
 }
 %    \end{macrocode}
@@ -189,17 +196,16 @@ This work consists of the file  acroterm.dtx
 \newcommand{\bfhref}[1]{\textbf{\hyperpage{#1}}}
 %    \end{macrocode}
 %
-% \noindent
 % And some code for index generation (also to be fixed).
 %
 %    \begin{macrocode}
 \newcommand{\acro@define}[2]{% #1: long term, #2: acronym
   \sindex[idx]{#1|see{\acrostyle{#2}}}% TODO: include acronyms in the general index?
-\@ifundefined{acronymlong#2}{%
+  \@ifundefined{acronymlong#2}{%
   \provideacronym{#2}{#1}%
-}{}
+}{}%
   \sindex[acronym]{#2@#2|bfhref}% TODO: fix the following line
-  %\sindex[acronym]{#2@#2 --- \csname acronymlong#2\endcsname|bfhref}%
+%\sindex[acronym]{#2@#2 --- \csname acronymlong#2\endcsname|bfhref}%
 }
 %    \end{macrocode}
 %
