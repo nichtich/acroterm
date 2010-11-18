@@ -224,12 +224,13 @@ This work consists of the file  acroterm.dtx
 % Here comes a buggy internal macro to be fixed.
 %    \begin{macrocode}
 \newcommand{\provideacronym}[2]{%
-  \expandafter\providecommand\expandafter{\csname acronymlong#2\endcsname}{#1}%
+  \expandafter\providecommand\expandafter{\csname acronymlong#1\endcsname}{#2}%
 }
 %    \end{macrocode}
 % \end{macro}
 %
-% The following hack is required hack to mix hyperref and formatted page numbers
+% The following hack is required hack to mix hyperref and formatted page numbers.
+% It may be changed because \verb|\bfhref| may already be defined.
 %    \begin{macrocode}
 \newcommand{\bfhref}[1]{\textbf{\hyperpage{#1}}}
 %    \end{macrocode}
@@ -246,6 +247,16 @@ This work consists of the file  acroterm.dtx
 %\sindex[acronym]{#2@#2 --- \csname acronymlong#2\endcsname|bfhref}%
 }
 %    \end{macrocode}
+
+% \begin{macro}{\acroexpand}
+% print the expanded form (that is the term) of an acronym, if defined.
+%    \begin{macrocode}
+\newcommand{\acroexpand}[1]{%
+  \@ifundefined{acronymlong#1}{}{%
+  \csname acronymlong#1\endcsname}%
+}
+%    \end{macrocode}
+% \end{macro}
 %
 % \subsection{Main macros}
 %
