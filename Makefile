@@ -1,6 +1,6 @@
 
 PKG = $(shell basename `pwd`)
-FILES = README $(PKG).ins $(PKG).dtx
+FILES = README $(PKG).ins $(PKG).dtx example.tex
 RESULTS = $(PKG).pdf $(PKG).sty
 
 $(PKG).tar.gz: $(FILES) $(RESULTS)
@@ -15,6 +15,11 @@ $(PKG).pdf: $(PKG).dtx
 
 $(PKG).sty: $(PKG).ins
 	tex $<
+
+example.pdf: example.tex
+	pdflatex $<;
+	splitindex example;
+	pdflatex $<;
 
 README: README.markdown
 	cp -f $< $@

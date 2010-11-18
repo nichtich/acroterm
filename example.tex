@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage[makeindex,protected]{splitidx}
+\usepackage{acroterm}% muste be loaded *after* splitidx
+\usepackage[pdfborder={0 0 0},colorlinks]{hyperref}
+
+\newindex[Terms]{idx}
+\newindex[Acronyms]{acronym}
+
+\begin{document}
+\noindent
+This documents demonstrated the use of acroterm package with index generation.
+It contains some acronyms like \aterm{RTFM}{read the f*cking manual} and the
+non-explained \acro{FOO}, some terms like \tacro{user-centered design}{UCD}
+and `\term{buzzword}', and the following indexes:
+
+\printsubindex[idx]
+\printsubindex[acronym]
+
+\end{document}
