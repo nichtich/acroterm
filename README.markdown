@@ -36,6 +36,10 @@ For each command there is a strong variant that starts with an uppercase:
 Changes
 -------
 
+v0.1
+
+  * Added acronym expansion
+
 v0.0
 
   * Unstable Development version

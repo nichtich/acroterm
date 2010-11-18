@@ -42,7 +42,7 @@ This work consists of the file  acroterm.dtx
 %</driver>
 %<package>\ProvidesPackage{acroterm}
 %<*package>
-  [2010/10/13 v0.0 Manage acronyms and terms]
+  [2010/11/18 v0.1 Manage acronyms and terms]
 %</package>
 %    \end{macrocode}
 %
@@ -108,6 +108,10 @@ This work consists of the file  acroterm.dtx
 %   \verb|\aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \aterm{DIY}{Do it yourself} \\
 % \end{tabular}
 %
+% And, after definition of an acronym like above:
+%
+% ~~\verb|\acroexpand{DIY}|~~$\longrightarrow$~~Do it yourself
+%
 % The macros \verb|\term| and \verb|\acro| simply set some text as term or
 % as acronym. \verb|\tacro| and \verb|\aterm| mark a term together with its
 % acronym or vice versa. In all cases, terms and acronyms are put into a 
@@ -116,16 +120,16 @@ This work consists of the file  acroterm.dtx
 % \verb|\term| and \verb|\tacro| support an optional parameter for indexing.
 % With
 %
-% ~~\verb|\term[Potrzebie System of Weights and Measures]{Potrzebie System}| \\
-% \hspace*{2em}~$\longrightarrow$
-% \term[Potrzebie System of Weights and Measures]{Potrzebie System}
+% ~~\verb|\term[Potrzebie System of Weights and Measures]{Potrzebie System}|
 %    
-% the term `Potrzebie System of Weights and Measures' will included in the
-% index but `Potrzebie System' will be shown in the text. In the same way:
+% the term `Potrzebie System of Weights and Measures' is included in the index
+% but `\term[Potrzebie System of Weights and Measures]{Potrzebie System}`
+% is printed in the text. In the same way:
 %
 % ~~\verb|\tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}| \\
-% \hspace*{2em}~$\longrightarrow$
-% \tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}
+%
+% Prints `\tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}` but indexes
+% `Gang of Four (Patterns)'.
 %
 % For each command there is an emphasizing variant that starts with an 
 % uppercase letter:
@@ -136,11 +140,6 @@ This work consists of the file  acroterm.dtx
 %   \verb|\Tacro{Do it yourself}{DIY}| & $\longrightarrow$ & \Tacro{Do it yourself}{DIY} \\
 %   \verb|\Aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \Aterm{DIY}{Do it yourself} \\
 % \end{tabular}
-%
-%%%    \Tacro{situation normal: all fucked up}{SNAFU}
-%%%    \Aterm{SNAFU}{situation normal: all fucked up}
-%%%    \tacro{situation normal: all fucked up}{SNAFU}
-%%%    \aterm{SNAFU}{situation normal: all fucked up}
 %
 % \newpage
 % \section{Implementation}
@@ -164,57 +163,52 @@ This work consists of the file  acroterm.dtx
 %
 % \begin{macro}{\acrostyle}
 % print an acronym in normal form 
-%    \begin{macrocode}
-\newcommand{\acrostyle}[1]{\textsc{\lowercase{#1}}} 
-%    \end{macrocode}
-% \end{macro}
-% 
 % \begin{macro}{\Acrostyle}
 % print an acronym in emphasized form
 %    \begin{macrocode}
 \newcommand{\Acrostyle}[1]{#1} 
+\newcommand{\acrostyle}[1]{\textsc{\lowercase{#1}}} 
 %    \end{macrocode}
 % \end{macro}
-%
+% \end{macro}
+% 
 % \begin{macro}{\termstyle}
 % print a term in normal form
-%    \begin{macrocode}
-\newcommand{\termstyle}[1]{#1} 
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\Termstyle}
 % print a term in emphasized form
 %    \begin{macrocode}
+\newcommand{\termstyle}[1]{#1} 
 \newcommand{\Termstyle}[1]{\textit{#1}} 
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\tacrostyle}
 % print a term and its acronym in normal form
-%    \begin{macrocode}
-\newcommand{\tacrostyle}[2]{\termstyle{#1} (\acrostyle{#2})} 
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\Tacrostyle}
 % print a term and its acronym in emphasized form
 %    \begin{macrocode}
+\newcommand{\tacrostyle}[2]{\termstyle{#1} (\acrostyle{#2})} 
 \newcommand{\Tacrostyle}[2]{\Termstyle{#1} (\acrostyle{#2})} 
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\atermstyle}
 % print an acronym and its term in normal form
-%    \begin{macrocode}
-\newcommand{\atermstyle}[2]{\acrostyle{#1} (\termstyle{#2})} 
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\Atermstyle}
 % print an acronym and its term in emphasized form
 %    \begin{macrocode}
+\newcommand{\atermstyle}[2]{\acrostyle{#1} (\termstyle{#2})} 
 \newcommand{\Atermstyle}[2]{\acrostyle{#1} (\termstyle{#2})} 
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\acroindexstyle}
+% print an acronym as index entry.
+%    \begin{macrocode}
+\newcommand{\acroindexstyle}[1]{#1\acroexpand[ --- ]{#1}} 
 %    \end{macrocode}
 % \end{macro}
 %
@@ -241,19 +235,18 @@ This work consists of the file  acroterm.dtx
 \newcommand{\acro@define}[2]{% #1: long term, #2: acronym
   \sindex[idx]{#1|see{\acrostyle{#2}}}% TODO: include acronyms in the general index?
   \@ifundefined{acronymlong#2}{%
-  \provideacronym{#2}{#1}%
-}{}%
-  \sindex[acronym]{#2@#2|bfhref}% TODO: fix the following line
-%\sindex[acronym]{#2@#2 --- \csname acronymlong#2\endcsname|bfhref}%
+    \provideacronym{#2}{#1}}{}%
+  \sindex[acronym]{#2@\acroindexstyle{#2}|bfhref}%
 }
 %    \end{macrocode}
 
 % \begin{macro}{\acroexpand}
 % print the expanded form (that is the term) of an acronym, if defined.
+% The optional first parameter is prepended only on success.
 %    \begin{macrocode}
-\newcommand{\acroexpand}[1]{%
-  \@ifundefined{acronymlong#1}{}{%
-  \csname acronymlong#1\endcsname}%
+\newcommand{\acroexpand}[2][]{%
+  \@ifundefined{acronymlong#2}{}{%
+  #1\csname acronymlong#2\endcsname}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -287,10 +280,7 @@ This work consists of the file  acroterm.dtx
 %    \begin{macrocode}
 \newcommand{\acro}[1]{%
   \acrostyle{#1}%
-  \@ifundefined{acronymlong#1}%
-   {\sindex[acronym]{#1}}%
-   {\sindex[acronym]{#1}}%
-   %{\sindex[acronym]{#1@#1 --- \csname acronymlong#1\endcsname}}%
+  {\sindex[acronym]{#1@\acroindexstyle{#1}}}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -300,10 +290,7 @@ This work consists of the file  acroterm.dtx
 %    \begin{macrocode}
 \newcommand{\Acro}[1]{%
   \Acrostyle{#1}%
-  \@ifundefined{acronymlong#1}%
-   {\sindex[acronym]{#1}}%
-   {\sindex[acronym]{#1}}%
-   %{\sindex[acronym]{#1@#1 --- \csname acronymlong#1\endcsname}}%
+  {\sindex[acronym]{#1@\acroindexstyle{#1}}}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -332,7 +319,7 @@ This work consists of the file  acroterm.dtx
 % Parameters: \verb|{ACRO}{TERM}|
 %    \begin{macrocode}
 \newcommand{\aterm}[2]{%
-  \acro@define{#2}{#1}% TODO: not define but only use
+  \acro@define{#2}{#1}% TODO: not define but only use?
   \atermstyle{#1}{#2}}
 %    \end{macrocode}
 % \end{macro}
@@ -348,9 +335,11 @@ This work consists of the file  acroterm.dtx
 %
 % \subsection{TODO}
 % Index generation needs to be fixed and we want to discover multiple
-% definitions of an acronom with different terms. See the section on
-% `Auxiliary macros for name indexing directives'
-% in biblatex source code for hints.
+% definitions of an acronom with different terms. Should terms, that
+% are used without acronym, occurr in the acronym index?
+% 
+% See the section on `Auxiliary macros for name indexing directives'
+% in biblatex source code for hints on including macros in the index.
 %
 %\iffalse
 %</package>
