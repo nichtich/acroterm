@@ -47,9 +47,9 @@ v0.0
 Maintenance
 -----------
 
-The release version of this package will be available from CTAN:
+The curent release versions of this package is available from CTAN:
 
-* <http://ctan.org/>
+* <http://tug.ctan.org/pkg/acroterm>
 
 Development and historical versions are available from GitHub:
 
@@ -67,3 +67,4 @@ The Acroterm package is released under the
 version 1.3c or greater. The current maintainer is Jakob Voß.
 
 Copyright 2010 Jakob Voß
+
