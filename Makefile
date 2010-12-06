@@ -1,4 +1,3 @@
-
 PKG = $(shell basename `pwd`)
 FILES = README $(PKG).ins $(PKG).dtx example.tex
 RESULTS = $(PKG).pdf $(PKG).sty
@@ -16,6 +15,7 @@ $(PKG).pdf: $(PKG).dtx
 $(PKG).sty: $(PKG).ins
 	tex $<
 
+example: example.pdf
 example.pdf: example.tex
 	pdflatex $<;
 	splitindex example;

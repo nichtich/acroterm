@@ -33,6 +33,18 @@ For each command there is a strong variant that starts with an uppercase:
     
     \Aterm{SNAFU}{situation normal: all fucked up}
 
+Installation
+------------
+
+To use this package in documents located in any directory, you have to move 
+the file `acroterm.sty` into a directory searched by LaTeX. Usual locations
+are `/usr/share/texmf` and `/usr/local/share/texmf`, or `~/texmf`. Afterwards
+you should run `texthash'.
+
+To newly create the file `acroterm.sty`, call at the command line:
+
+    $ make
+
 Changes
 -------
 
