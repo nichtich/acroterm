@@ -93,7 +93,7 @@ This work consists of the file  acroterm.dtx
 % them in an index. In addition you can connect acronyms and terms that 
 % belong together. You fully control,  where a term is used in full form, 
 % and where it is used as acronym. Tracking the first ocurrence of a term
-% is not the primary goal of this package, but may implemented in a later
+% is not the primary goal of this package, but may be implemented in a later
 % version.
 %
 % The current version of this package is a developer version that still depends
@@ -102,6 +102,7 @@ This work consists of the file  acroterm.dtx
 %
 % A small example is included in this package in file |example.tex|.
 %
+% \newpage
 % \section{Description}
 %
 % Essentially, this package provides four macros to mark terms, acronyms, and both:
@@ -113,14 +114,29 @@ This work consists of the file  acroterm.dtx
 %   |\aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \aterm{DIY}{Do it yourself} \\
 % \end{tabular}
 %
-% And, after definition of an acronym like above:
+% After definition of an acronym like above, you can also use:
 %
 % ~~|\acroexpand{DIY}|~~$\longrightarrow$~~Do it yourself
 %
 % The macros |\term| and |\acro| simply set some text as term or
 % as acronym. |\tacro| and |\aterm| mark a term together with its
-% acronym or vice versa. In all cases, terms and acronyms are put into a 
-% special index that can be used later. Layout can be controlled globally.
+% acronym or vice versa. In all cases, terms and acronyms are put 
+% into a special index.
+%
+% Each command has an emphasizing variant that starts with an uppercase letter:
+%
+% \begin{tabular}{lcl}
+%   |\Acro{SNAFU}|     & $\longrightarrow$ & \Acro{SNAFU}  \\
+%   |\Term{Potrzebie}| & $\longrightarrow$ & \Term{Potrzebie} \\
+%   |\Tacro{Do it yourself}{DIY}| & $\longrightarrow$ & \Tacro{Do it yourself}{DIY} \\
+%   |\Aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \Aterm{DIY}{Do it yourself} \\
+% \end{tabular}
+%
+% Layout can be controlled globally by redefining various |\...style| macros.
+% By default, emphasized uses of a term or acronym show up differently in the
+% generated index. If you only want to index a term or acronym, without printing
+% it in the text, use any of the starred macros |\term*|, |\Term*|, |\acro*|, and
+% |\Acro*|.
 %
 % |\term| and |\tacro| support an optional parameter for indexing.
 % With
@@ -135,15 +151,6 @@ This work consists of the file  acroterm.dtx
 %
 % prints `\tacro[Gang of Four (Patterns)]{Gang of Four}{GoF}` but indexes
 % `Gang of Four (Patterns)'.
-%
-% Each command has an emphasizing variant that starts with an uppercase letter:
-%
-% \begin{tabular}{lcl}
-%   |\Acro{SNAFU}|     & $\longrightarrow$ & \Acro{SNAFU}  \\
-%   |\Term{Potrzebie}| & $\longrightarrow$ & \Term{Potrzebie} \\
-%   |\Tacro{Do it yourself}{DIY}| & $\longrightarrow$ & \Tacro{Do it yourself}{DIY} \\
-%   |\Aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \Aterm{DIY}{Do it yourself} \\
-% \end{tabular}
 %
 % \newpage
 % \section{Implementation}
@@ -292,8 +299,8 @@ This work consists of the file  acroterm.dtx
 % \begin{macro}{\Term}
 % \begin{macro}{\Term*}
 % Marks a term in emphasized form. The arguments are 
-% \oarg{index term}\marg{term}. The starred version does not print anything, 
-% but only indexes the term.
+% \oarg{index term}\marg{term}. The starred version does not print
+% anything, but only indexes the term.
 %    \begin{macrocode}
 \def\Term{\@ifstar\Term@index\Term@show}
 \newcommand{\Term@index}[2][]{%
@@ -307,23 +314,31 @@ This work consists of the file  acroterm.dtx
 % \end{macro}
 %
 % \begin{macro}{\acro}
+% \begin{macro}{\acro*}
 % Marks an acronym in normal form. The argument is \marg{acronym}.
+% The starred version does not print anything, but only indexes the acronym.
 %    \begin{macrocode}
-\newcommand{\acro}[1]{%
-  \acrostyle{#1}%
-  {\sindex[acronym]{#1@\acroindexstyle{#1}}}%
-}
+\def\acro{\@ifstar\acro@index\acro@show}
+\newcommand{\acro@index}[1]{%
+  {\sindex[acronym]{#1@\acroindexstyle{#1}}}}
+\newcommand{\acro@show}[1]{%
+  \acrostyle{#1}\acro@index{#1}}
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\Acro}
+% \begin{macro}{\Acro*}
 % Marks an acronym in emphasized form. The argument is \marg{acronym}.
+% The starred version does not print anything, but only indexes the acronym.
 %    \begin{macrocode}
-\newcommand{\Acro}[1]{%
-  \Acrostyle{#1}%
-  {\sindex[acronym]{#1@\acroindexstyle{#1}}}%
-}
+\def\Acro{\@ifstar\Acro@index\Acro@show}
+\newcommand{\Acro@index}[1]{%
+  {\sindex[acronym]{#1@\acroindexstyle{#1}}}}
+\newcommand{\Acro@show}[1]{%
+  \Acrostyle{#1}\Acro@index{#1}}
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\tacro}
