@@ -13,6 +13,8 @@ This documents demonstrated the use of acroterm package with index generation.
 It contains some acronyms like \aterm{RTFM}{read the f*cking manual} and the
 non-explained \acro{FOO}, some terms like \tacro{user-centered design}{UCD}
 and `\term{buzzword}', and the two indexes.
+\term*{foo}\Term*{Bar}% not printed
+\Term{Dummy} is also an important term.
 
 \printsubindex[idx]
 \printsubindex[acronym]
@@ -22,6 +24,8 @@ and `\term{buzzword}', and the two indexes.
 This is the second page. It contains the acronmy \acro{RTFM}, that stands
 for \acroexpand{RTFM}, and the term \term{user-centered design} to test 
 additional references.
+
+\Acro{RTFM}
 
 \acroexpand[This is an expanded acronym: ]{UCD}
 \acroexpand[This is an expanded acronym: ]{XYZ}

@@ -42,7 +42,7 @@ This work consists of the file  acroterm.dtx
 %</driver>
 %<package>\ProvidesPackage{acroterm}
 %<*package>
-  [2010/11/19 v0.1 Manage and index acronyms and terms]
+  [2010/12/06 v0.1b Manage and index acronyms and terms]
 %</package>
 %    \end{macrocode}
 %
@@ -275,26 +275,35 @@ This work consists of the file  acroterm.dtx
 % \subsection*{Main macros}
 %
 % \begin{macro}{\term}
+% \begin{macro}{\term*}
 % Marks a term in normal form. The arguments are \oarg{index term}\marg{term}.
+% The starred version does not print anything, but only indexes the term.
 %    \begin{macrocode}
-\newcommand{\term}[2][]{%
+\def\term{\@ifstar\term@index\term@show}
+\newcommand{\term@index}[2][]{%
   \ifthenelse{\isempty{#1}}%
-  {\sindex[idx]{#2}}{\sindex[idx]{#1}}%
-  \termstyle{#2}}
+  {\sindex[idx]{#2}}{\sindex[idx]{#1}}}
+\newcommand{\term@show}[2][]{%
+  \term@index[#1]{#2}\termstyle{#2}}
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\Term}
-% Marks a term in emphasized form. 
-% The arguments are \oarg{index term}\marg{term}.
+% \begin{macro}{\Term*}
+% Marks a term in emphasized form. The arguments are 
+% \oarg{index term}\marg{term}. The starred version does not print anything, 
+% but only indexes the term.
 %    \begin{macrocode}
-\newcommand\Term[2][]{%
+\def\Term{\@ifstar\Term@index\Term@show}
+\newcommand{\Term@index}[2][]{%
   \ifthenelse{\isempty{#1}}%
   {\sindex[idx]{#2|acrotermbfhp}}%
-  {\sindex[idx]{#1|acrotermbfhp}}%
-  \Termstyle{#2}%
-}
+  {\sindex[idx]{#1|acrotermbfhp}}}
+\newcommand{\Term@show}[2][]{%
+  \Term@index[#1]{#2}\Termstyle{#2}}
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\acro}
