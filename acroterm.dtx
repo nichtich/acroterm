@@ -42,7 +42,7 @@ This work consists of the file  acroterm.dtx
 %</driver>
 %<package>\ProvidesPackage{acroterm}
 %<*package>
-  [2010/12/06 v0.1b Manage and index acronyms and terms]
+  [2011/01/28 v0.1c Manage and index acronyms and terms]
 %</package>
 %    \end{macrocode}
 %
@@ -132,11 +132,21 @@ This work consists of the file  acroterm.dtx
 %   |\Aterm{DIY}{Do it yourself}| & $\longrightarrow$ & \Aterm{DIY}{Do it yourself} \\
 % \end{tabular}
 %
-% Layout can be controlled globally by redefining various |\...style| macros.
-% By default, emphasized uses of a term or acronym show up differently in the
-% generated index. If you only want to index a term or acronym, without printing
-% it in the text, use any of the starred macros |\term*|, |\Term*|, |\acro*|, and
-% |\Acro*|.
+% Layout can be controlled globally by redefining various |\...style| macros,
+% which can also be used seperately. A usual setting is:
+%%
+% \begin{tabular}{l}
+% |\usepackage{relsize}| \\
+% |\renewcommand{\acrostyle}[1]{\textsc{\smaller #1}}| \\
+% |\renewcommand{\Acrostyle}[1]{\textsc{#1}}| \\
+% |\renewcommand{\Termstyle}[1]{\textbf{#1}}| \\
+% \end{tabular}
+%%
+% By default, \emph{emphasized} terms and acronyms show up differently also in 
+% the generated index. To prevent that page numbers show up twice (once normal
+% and once emphasized) you may need to filter the |.idx| file. To index a term
+% or acronym, without printing it in the text, use any of the starred macros
+% |\term*|, |\Term*|, |\acro*|, and |\Acro*|.
 %
 % |\term| and |\tacro| support an optional parameter for indexing.
 % With
